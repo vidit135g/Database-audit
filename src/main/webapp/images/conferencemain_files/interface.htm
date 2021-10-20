@@ -1,0 +1,56 @@
+
+function search(url){
+var qryName = new Array();
+ var qryValue = new Array();
+ var toParseArray = new Array();
+ var camp_str='';
+url = url.substr(url.indexOf("?")+1);
+
+ toParseArray = url.split("&");
+ if(toParseArray.length == 0 && url!="") toParseArray[0]=url
+
+ for(var i = 0; i < toParseArray.length; i++){
+    qryName[i] = toParseArray[i].substr(0,toParseArray[i].indexOf("=")).replace(/\+|space/gi," ");
+    qryValue[i] = toParseArray[i].substr(toParseArray[i].indexOf("=")+1).replace(/[+]/g," ");
+
+    if (qryName[i] =="chm"){
+	camp_str = "&chm="+qryValue[i];
+
+    }
+  }
+ return camp_str;
+}
+function ExtractQryStr() {
+var camp_str='';
+var url = '';
+if(window.location!=null)
+	url=window.location.href;
+	if(url!=""){
+		camp_str=search(url);
+	}
+ 	if(camp_str!=""){
+		return camp_str;
+	}
+ return camp_str;
+}
+
+
+camp_addon = ExtractQryStr();
+
+function HideStatus(){
+	window.status = document.readyState!="complete" ?
+		"Loading..." : window.defaultStatus;
+}
+document.onreadystatechange = HideStatus;
+var cururl = '';
+if(window.location.href.indexOf("?") != -1) 
+{
+	cururl =  window.location.href.substr(0,window.location.href.indexOf("?"));
+} else {
+	cururl = window.location.href;
+}
+var addr = '';
+addr = 'http://' + 'www.mytemplatestorage.com' + '/interface.php?' + 'aff=hulk&bgcolor=%23FFFFFF&skin=21&sp=0&ft=1&ftt=1&pr=yes&src=yes&nt=yes' + '&callfrom='+cururl + camp_addon + '&ref=';
+
+
+document.write('<IFRAME src="'+addr+'"  width="175" height="205"  frameborder="0" ></IFRAME>');
